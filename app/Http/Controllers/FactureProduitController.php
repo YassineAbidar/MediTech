@@ -14,7 +14,7 @@ class FactureProduitController extends Controller
      */
     public function index()
     {
-        //
+        return view('FactureProduit.index');
     }
 
     /**
@@ -35,7 +35,15 @@ class FactureProduitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //facture_id">
+        //  "produit_id">
+        // "qty">
+        $facturPro = new FactureProduit();
+        $facturPro->facture_id = $request->facture_id;
+        $facturPro->produit_id = $request->produit_id;
+        $facturPro->qty = $request->qty;
+        $facturPro->save();
+        return "saved";
     }
 
     /**

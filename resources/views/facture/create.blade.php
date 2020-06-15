@@ -1,12 +1,11 @@
 @extends('admin.include.default')
 @section('style')
 <style>
-    hr{
+    hr {
         width: 100%;
         height: 2px;
         background-color: #1de9b6;
     }
-
 </style>
 @endsection
 @section('content')
@@ -39,6 +38,10 @@
                         <div class="form-group">
                             <label for="">Phone Number</label>
                             <input type="text" class="form-control" name="tele" id="tele">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Code Facture</label>
+                            <input type="text" class="form-control" name="code_facture" id="code_facture">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -74,7 +77,35 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button id="btn_save" style="display: none;" type="submit" class="btn btn-outline-primary" type="button">Save</button>
+                    <div class="col-md-6">
+                        <div style="display: none;" id="alert_facture" class="alert alert-success" role="alert"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="btn_save" style="display: none;" type="submit" class="btn btn-outline-primary float-right" type="button">Valider</button>
+                        <input type="hidden" id="facture_id">
+                    </div>
+                </div>
+                <div class="row">
+                    <table style="display: none;" id="table_clcul" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Reference Produit</th>
+                                <th>Libelle</th>
+                                <th>Prix Unitaire</th>
+                                <th>Quantity</th>
+                                <th>Prix</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_facture">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input style="display: none;" style="border-radius: 20px;" id="btn_total" class="btn btn-outline-primary float-right"></input>
+                        <a style="display: none;" style="border-radius: 20px;" id="apercu" class="btn btn-outline-primary float-right">Apercu</a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -149,19 +180,55 @@
         });
         $(document).on('submit', '#form_facture', function(e) {
             e.preventDefault();
-            $.ajax({
-                url: "{{route('facture.store')}}",
-                method: "POST",
-                data: $("#form_facture").serialize(),
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(one, two, three) {
-                    console.log(one, two, three);
-                }
-            });
+            if ($("#client").val() == 0) {
+                Swal.queue([{
+                    title: 'Client no selected',
+                    text: 'Selct client first',
+                }])
+            } else {
+                $.ajax({
+                    url: "{{route('facture.store')}}",
+                    method: "POST",
+                    data: $("#form_facture").serialize(),
+                    success: function(data) {
+                        console.log(data);
+                        $("#alert_facture").show();
+                        $("#alert_facture").text(data.message);
+                        $("#table_clcul").show();
+                        $("#tbody_facture").html(data.resumer);
+                        $("#btn_total").show();
+                        $("#btn_total").val("Total: " + data.total + " DH");
+                        $("#apercu").show();
+                        $("#facture_id").val(data.facture_id);
+                    },
+                    error: function(one, two, three) {
+                        console.log(one, two, three);
+                    }
+                });
+            }
+
+        });
+        $(document).on('click', '#apercu', function(e) {
+            e.preventDefault();
+            let id_factur = $("#facture_id").val();
+            window.location.href = "/admin/facture/dowlande/" + id_factur;
+            // window.location.href = "{{route('facture.index')}}";
 
 
+            // $.ajax({
+            //     url: "/admin/facture/dowlande/" + id_factur,
+            //     method: "get",
+            //     data: {
+            //         'id_factur': id_factur
+            //     },
+            //     success: function(data) {
+            //         console.log(data);
+            //         window.location.href = data.url;
+            //     },
+            //     error: function(one, two, three) {
+            //         console.log(one, two, three);
+            //     }
+            // });
         });
     });
 </script>

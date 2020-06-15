@@ -29,3 +29,8 @@ Route::get('admin/produitSeleted/', 'ProduitController@getProduitSelection')->na
 Route::POST('admin/product/updateProduct/', 'ProduitController@updateProduit')->name('produit.editProduct');
 //Facture route
 Route::resource('/admin/facture', 'FactureController');
+//
+Route::GET('admin/facture/dowlande/{id}', 'FactureController@getPdfFacture')->name('facture.apercu');
+// route FactureProduit
+
+Route::resource('/admin/FacturProduit', 'FactureProduitController');

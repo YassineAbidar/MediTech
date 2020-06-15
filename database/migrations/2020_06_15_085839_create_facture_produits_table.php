@@ -15,12 +15,15 @@ class CreateFactureProduitsTable extends Migration
     {
         Schema::create('facture_produits', function (Blueprint $table) {
             $table->id();
-            $table->integer('facture_id');
-            $table->integer('produit_id');
+            $table->integer('facture_id')->unsigned();
+            $table->integer('produit_id')->unsigned();
+            $table->foreign('facture_id')->references('id')->on('factures');
+            $table->foreign('produit_id')->references('id')->on('produits');
             $table->float('qty');
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      *

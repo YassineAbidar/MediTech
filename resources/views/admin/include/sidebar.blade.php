@@ -32,6 +32,10 @@
         <li>
             <a href="{{route('facture.index')}}">Facture</a>
         </li>
+        <!-- FacturProduit -->
+        <li>
+            <a href="{{route('FacturProduit.index')}}">Ligne facture</a>
+        </li>
         <li>
             <a href="#">Users</a>
         </li>
