@@ -13,6 +13,13 @@
         </div>
     </center>
     @endif
+    @if(session()->has('error'))
+    <center>
+        <div class="alert alert-success col-md-12 justify-content-center">
+            {{session()->get('error')}}
+        </div>
+    </center>
+    @endif
     <div class="row">
         <div class="col-md-6">
             <a href="{{route('facture.create')}}" class="btn btn-success">
@@ -43,9 +50,8 @@
                                 <td>{{$facture->date_creation}}</td>
                                 <th>{{$facture->client_id}}</th>
                                 <th>
-                                    <a href="#" class="btn btn-sm btn-info">Show</a>
-                                    <a href="#" class="btn btn-sm btn-default">Edit</a>
-                                    <a href="#" class="btn btn-sm btn-danger">delete</a>
+                                    <a href="{{route('facture.showFact',$facture->id)}}" class="btn btn-sm btn-info">Show</a>
+                                    <a href="/admin/facture/delete/{{$facture->id}}" class="btn_delete btn btn-sm btn-danger">delete</a>
                                 </th>
                             </tr>
                             @endforeach
@@ -80,7 +86,7 @@
             const url = $(this).attr('href');
             console.log(url);
             Swal.fire({
-                title: 'Are you shure to delete client ?',
+                title: 'Are you shure to delete facture ?',
                 text: "La suppression est reversible",
                 icon: 'warning',
                 showCancelButton: true,
@@ -92,7 +98,7 @@
                     window.location.href = url;
                     Swal.fire(
                         'deleting!',
-                        'client hass been deleted successfly',
+                        'facture hass been deleted successfly',
                         'success'
                     )
                 }

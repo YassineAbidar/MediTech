@@ -107,10 +107,31 @@ class FactureController extends Controller
             'facture' => $facture,
             'produits' => $tabProduct,
             'client' => $client,
-            'total'=>$total,
+            'total' => $total,
         ];
         $pdf = PDF::loadView('facture.apercu', $data);
         return $pdf->download('Facture.pdf');
+    }
+
+    public function showFacture($id)
+    {
+        $facture = Facture::find($id);
+        // dd($facture, $facture->produits);
+        $client = Client::find($facture->client_id);
+        $tabProduct = [];
+        $ligne_factures = DB::table('facture_produits')->where('facture_id', $id)->get();
+        $total = 0;
+        foreach ($ligne_factures as $ligne_facture) {
+            $produit = Produit::find($ligne_facture->produit_id);
+            $tabProduct[] = [$produit, $ligne_facture->qty];
+            $total += $produit->prix_unitaire * $ligne_facture->qty;
+        }
+        return view('facture.show')->with([
+            'facture' => $facture,
+            'produits' => $tabProduct,
+            'client' => $client,
+            'total' => $total,
+        ]);
     }
     /**
      * Display the specified resource.
@@ -154,6 +175,20 @@ class FactureController extends Controller
      */
     public function destroy(Facture $facture)
     {
-        //
+        dd($facture);
+    }
+    public function deletefacture($id)
+    {
+        $facture = Facture::find($id);
+        if ($facture != null) {
+            // dd($facture);
+            $facture->delete();
+            session()->flash('success', "facture  deleted successfly");
+            // toast(session('success'), 'success');
+        } else {
+            session()->flash('error', "facture doesn't existe");
+            // toast(session('error'), 'error');
+        }
+        return redirect(route('facture.index'));
     }
 }

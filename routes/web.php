@@ -30,7 +30,11 @@ Route::POST('admin/product/updateProduct/', 'ProduitController@updateProduit')->
 //Facture route
 Route::resource('/admin/facture', 'FactureController');
 //
-Route::GET('admin/facture/dowlande/{id}', 'FactureController@getPdfFacture')->name('facture.apercu');
+
 // route FactureProduit
 
 Route::resource('/admin/FacturProduit', 'FactureProduitController');
+Route::GET('admin/facture/dowlande/{id}', 'FactureController@getPdfFacture')->name('facture.apercu');
+Route::GET('admin/facture/show/{id}', 'FactureController@showFacture')->name('facture.showFact');
+Route::GET('admin/facture/delete/{id}', 'FactureController@deletefacture')->name('facture.delete');
+//
