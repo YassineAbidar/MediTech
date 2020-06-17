@@ -38,7 +38,8 @@
                                 <th>Id</th>
                                 <th>Code Facture</th>
                                 <th>date creation</th>
-                                <th>Client Id</th>
+                                <th>Nom Client</th>
+                                <th>Prenom Client</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -48,7 +49,8 @@
                                 <td>{{$facture->id}}</td>
                                 <td>{{$facture->code_facture}}</td>
                                 <td>{{$facture->date_creation}}</td>
-                                <th>{{$facture->client_id}}</th>
+                                <th>{{$facture->client->nom}}</th>
+                                <th>{{$facture->client->prenom}}</th>
                                 <th>
                                     <a href="{{route('facture.showFact',$facture->id)}}" class="btn btn-sm btn-info">Show</a>
                                     <a href="/admin/facture/delete/{{$facture->id}}" class="btn_delete btn btn-sm btn-danger">delete</a>

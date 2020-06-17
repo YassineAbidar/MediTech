@@ -6,6 +6,7 @@ use App\Produit;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProduitRequest;
 use Symfony\Component\Console\Input\Input;
+use Illuminate\Support\Facades\DB;
 
 class ProduitController extends Controller
 {
@@ -144,5 +145,20 @@ class ProduitController extends Controller
                 'status' => true,
             ]);
         }
+    }
+    public function getDemandeProduit()
+    {
+
+        $produits = Produit::all();
+        $resulta=DB::selectOne("select produit_demande(1) as value from dual");
+        // dd($resulta);
+        foreach ($produits as $produit) {
+            $result = DB::selectOne("select produit_demande($produit->id) as value from dual");
+            $produit->setAttribute('demande', $result->value);
+        }
+        // dd($produits);
+        // $produits = DB::statement('exec mention_demande(2)');
+        // dd($resulta->value);
+        return view('produit.demande');
     }
 }

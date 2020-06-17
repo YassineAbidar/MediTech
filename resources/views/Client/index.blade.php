@@ -19,6 +19,9 @@
                 <i class="fas fa-plus fa-1x mr-1"></i>Add new Client
             </a>
         </div>
+        <div class="col-md-6">
+            <a href="{{route('client.categoryClient')}}" class="btn btn-default float-right text-white">Client Category</a>
+        </div>
     </div>
     <div class="row mt-2">
         <div class="col-md-12">

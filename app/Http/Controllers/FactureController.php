@@ -20,12 +20,16 @@ class FactureController extends Controller
     public function index()
     {
         $factures = Facture::all();
-        $factureCli = [];
+
         // foreach ($factures as $facture) {
         //     $cliet = $facture->client;
         //     $factureCli[] = [$facture, $facture->client];
         // }
         // dd($factureCli);
+        foreach ($factures as $factuCli) {
+            $factuCli->setAttribute('client', $factuCli->client);
+        }
+        // dd($factures);
         return view('facture.index')->with('factures', $factures);
     }
 

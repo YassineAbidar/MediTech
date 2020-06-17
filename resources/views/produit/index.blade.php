@@ -7,9 +7,9 @@
 <div class="col-md-12">
     @if(session()->has('success'))
     <center>
-    <div class="alert alert-success col-md-12 justify-content-center">
-        {{session()->get('success')}}
-    </div>
+        <div class="alert alert-success col-md-12 justify-content-center">
+            {{session()->get('success')}}
+        </div>
     </center>
     @endif
     @if(!count($produits)>0)
@@ -20,6 +20,9 @@
             <a data-toggle="modal" data-target="#AddProduct" class="btn btn-success">
                 <i class="fas fa-plus fa-1x mr-1"></i>Add new Product
             </a>
+        </div>
+        <div class="col-md-6">
+             <a href="{{route('produit.demande')}}" class="btn btn-default float-right text-white">inventory of products</a>
         </div>
     </div>
     <div class="card">

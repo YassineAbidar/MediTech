@@ -6,6 +6,7 @@ use App\Client;
 use App\Http\Requests\ClientRequest;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
 {
@@ -143,5 +144,29 @@ class ClientController extends Controller
                 'client' => $client,
             ]);
         }
+    }
+    public function getCategoryClient()
+    {
+        $clients = Client::all();
+        $clientVip = [];
+        $clientOrdinaire = [];
+        $clientPotentielle = [];
+        foreach ($clients as $client) {
+            $nbrFacture = DB::table('factures')->where('client_id', $client->id)->count();
+            $client->setAttribute('nbrFacture', $nbrFacture);
+            $viewChiffreAffaire = DB::select("select * from V_CHIFFRE_AFFAIRE where id_client=$client->id");
+            // dd($viewChiffreAffaire);
+            if ($viewChiffreAffaire[0]->categorie == 'VIP') {
+                $clientVip[] = [$viewChiffreAffaire, $client];
+            } elseif ($viewChiffreAffaire[0]->categorie == 'Ordinaire') {
+                $clientOrdinaire[] = [$viewChiffreAffaire, $client];
+            } elseif ($viewChiffreAffaire[0]->categorie == 'Potentiel') {
+                $clientPotentielle[] = [$viewChiffreAffaire, $client];
+            }
+        }
+        // dd($clientVip, $clientOrdinaire, $clientPotentielle);
+        return view('Client.category')->with('clientVip', $clientVip)
+            ->with('clientOrdinaire', $clientOrdinaire)
+            ->with('clientPotentiel', $clientPotentielle);
     }
 }
