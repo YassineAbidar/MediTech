@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->name('login');
 
 //
-Route::get('/loginUser', 'UserController@SeConnecter')->name('seconnecter');
+
 // CLIENT ROUTE
 Route::resource('/admin/client', 'ClientController');
 Route::resource('/admin/users', 'UserController');
@@ -36,13 +36,24 @@ Route::get('admin/demande/product', 'ProduitController@getDemandeProduit')->name
 Route::POST('admin/product/updateProduct/', 'ProduitController@updateProduit')->name('produit.editProduct');
 //Facture route
 Route::resource('/admin/facture', 'FactureController');
+Route::GET('admin/facture/dowlande/{id}', 'FactureController@getPdfFacture')->name('facture.apercu');
+Route::GET('admin/facture/show/{id}', 'FactureController@showFacture')->name('facture.showFact');
+Route::GET('admin/facture/delete/{id}', 'FactureController@deletefacture')->name('facture.delete');
+
 //
+Route::GET('admin/facture/codeFacture/{code}', 'FactureController@getCodeFacture')->name('getCodeFacture');
+
 
 // route FactureProduit
 
 Route::resource('/admin/FacturProduit', 'FactureProduitController');
-Route::GET('admin/facture/dowlande/{id}', 'FactureController@getPdfFacture')->name('facture.apercu');
-Route::GET('admin/facture/show/{id}', 'FactureController@showFacture')->name('facture.showFact');
-Route::GET('admin/facture/delete/{id}', 'FactureController@deletefacture')->name('facture.delete');
+
 //
 Route::get('/home', 'HomeController@index')->name('home');
+
+//User
+Route::post('/loginUser', 'UserController@SeConnecter')->name('seconnecter');
+Route::get('/admin/user', 'UserController@getAllUser')->name('user.index');
+Route::get('/admin/user/delete/{id}', 'UserController@deleteUser')->name('user.delete');
+Route::POST('/admin/user/add/', 'UserController@store')->name('user.store');
+Route::get('/admin/user/logout/', 'UserController@logout')->name('user.logOut');

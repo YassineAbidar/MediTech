@@ -41,7 +41,8 @@
                         </div>
                         <div class="form-group">
                             <label for="">Code Facture</label>
-                            <input type="text" class="form-control" name="code_facture" id="code_facture">
+                            <input type="text" class="form-control" name="code_facture" id="code_facture" required>
+                            <div style="display: none;" id="alert_mesage_code" class="alert mt-2"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -117,6 +118,7 @@
 @section('script')
 <script>
     $(document).ready(function() {
+
         $(document).on('click', '#btn_add_product', function(e) {
             e.preventDefault();
             let list_product = $("#produits").val();
@@ -230,6 +232,33 @@
             //     }
             // });
         });
+        $("#code_facture").blur(function(e) {
+            e.preventDefault();
+            let code = $("#code_facture").val();
+            $.ajax({
+                url: "/admin/facture/codeFacture/" + code,
+                type: "GET",
+                success: function(data) {
+                    if (!data.status) {
+                        $("#alert_mesage_code").show();
+                        $("#alert_mesage_code").addClass('alert-danger');
+                        $("#alert_mesage_code").text(data.message);
+                        $("#btn_save").prop("disabled", true);
+                    } else {
+                        $("#alert_mesage_code").hide();
+                        $("#btn_save").prop("disabled", false);
+                    }
+                },
+                error: function(one, two, three) {
+                    console.log(one, two, three);
+                }
+            });
+
+        });
+        $("#qty_demande").blur(function(e) {
+            e.preventDefault();
+            alert($("#qty_demande").val());
+        })
     });
 </script>
 @endsection

@@ -151,17 +151,20 @@ class ClientController extends Controller
         $clientVip = [];
         $clientOrdinaire = [];
         $clientPotentielle = [];
+        // dd($clients);
         foreach ($clients as $client) {
             $nbrFacture = DB::table('factures')->where('client_id', $client->id)->count();
             $client->setAttribute('nbrFacture', $nbrFacture);
-            $viewChiffreAffaire = DB::select("select * from V_CHIFFRE_AFFAIRE where id_client=$client->id");
-            // dd($viewChiffreAffaire);
-            if ($viewChiffreAffaire[0]->categorie == 'VIP') {
-                $clientVip[] = [$viewChiffreAffaire, $client];
-            } elseif ($viewChiffreAffaire[0]->categorie == 'Ordinaire') {
-                $clientOrdinaire[] = [$viewChiffreAffaire, $client];
-            } elseif ($viewChiffreAffaire[0]->categorie == 'Potentiel') {
-                $clientPotentielle[] = [$viewChiffreAffaire, $client];
+            $viewChiffreAffaire = DB::select("select id_client,chiffre_affaire,categorie from V_CHIFFRE_AFFAIRE where id_client=$client->id");
+               if ($viewChiffreAffaire != null) {
+                $cat = $viewChiffreAffaire[0]->categorie;
+                if ($cat == 'VIP') {
+                    $clientVip[] = [$viewChiffreAffaire, $client];
+                } elseif ($cat == 'Ordinaire') {
+                    $clientOrdinaire[] = [$viewChiffreAffaire, $client];
+                } elseif ($cat == 'Potentiel') {
+                    $clientPotentielle[] = [$viewChiffreAffaire, $client];
+                }
             }
         }
         // dd($clientVip, $clientOrdinaire, $clientPotentielle);

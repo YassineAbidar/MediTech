@@ -137,7 +137,7 @@ class ProduitController extends Controller
                 <td>' . $produit->id . '</td>
                 <td>' . $produit->prix_unitaire . '</td>
                 <td>' . $produit->quantity_stock . '</td>
-                <td>  <input type="number" min="1" value="1" name="qty_demnde[]"> </td>
+                <td>  <input class="input_qty" id="qty_demande" type="number" min="1" value="1" name="qty_demnde[]"> </td>
       </tr>';
             }
             return response()->json([
@@ -148,17 +148,31 @@ class ProduitController extends Controller
     }
     public function getDemandeProduit()
     {
-
         $produits = Produit::all();
-        $resulta=DB::selectOne("select produit_demande(1) as value from dual");
-        // dd($resulta);
+        $produitFaible = [];
+        $produitMoyen = [];
+        $produitFort = [];
         foreach ($produits as $produit) {
-            $result = DB::selectOne("select produit_demande($produit->id) as value from dual");
-            $produit->setAttribute('demande', $result->value);
+            $resulta = DB::select("SELECT sum(fp.qty) as qty_demande
+            FROM facture_produits fp
+            WHERE fp.produit_id=$produit->id");
+            if ($resulta[0]->qty_demande > 15) {
+                $produit->setAttribute('demande', 'fort');
+                $produit->setAttribute('qtyDemande', $resulta[0]->qty_demande);
+                $produitFort[] = [$produit];
+            } else if ($resulta[0]->qty_demande >= 11) {
+                $produit->setAttribute('demande', 'moyene');
+                $produit->setAttribute('qtyDemande', $resulta[0]->qty_demande);
+                $produitMoyen[] = [$produit];
+            } else {
+                $produit->setAttribute('demande', 'faible');
+                $produit->setAttribute('qtyDemande', $resulta[0]->qty_demande);
+                $produitFaible[] = [$produit];
+            }
         }
-        // dd($produits);
-        // $produits = DB::statement('exec mention_demande(2)');
-        // dd($resulta->value);
-        return view('produit.demande');
+        // dd($produitFaible, $produitMoyen, $produitFort);
+        return view('produit.demande')->with('produitFaible', $produitFaible)
+            ->with('produitMoyen', $produitMoyen)
+            ->with('produitFort', $produitFort);
     }
 }

@@ -186,13 +186,39 @@ class FactureController extends Controller
         $facture = Facture::find($id);
         if ($facture != null) {
             // dd($facture);
+            $facture_produit = DB::table('facture_produits')->where('FACTURE_ID', $facture->id)->get();
+            // dd($facture_produit);
+            foreach ($facture_produit as $factProduit) {
+                $facture_produit = FactureProduit::find($factProduit->id);
+                $produit = Produit::find($factProduit->produit_id);
+                $produit->update([
+                    'quantity_stock' => $produit->quantity_stock + $factProduit->qty,
+                ]);
+                $facture_produit->delete();
+            }
             $facture->delete();
             session()->flash('success', "facture  deleted successfly");
-            // toast(session('success'), 'success');
+            toast(session('success'), 'success');
         } else {
             session()->flash('error', "facture doesn't existe");
-            // toast(session('error'), 'error');
+            toast(session('error'), 'error');
         }
         return redirect(route('facture.index'));
+    }
+
+    public function getCodeFacture($code)
+    {
+        $facture = DB::table('factures')->where('CODE_FACTURE', $code)->first();
+        if ($facture != null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Code already token'
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'message' => ''
+            ]);
+        }
     }
 }

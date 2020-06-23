@@ -21,39 +21,33 @@
             </ul>
         </li> -->
         <li>
-            <a href="#">Dashbord</a>
+            <a href="#">
+            <i class=" mr-3 fas fa-home"></i>Dashbord </a>
         </li>
         <li>
-            <a href="{{route('client.index')}}">Client</a>
+            <a href="{{route('client.index')}}">
+            <i class="mr-3 fas fa-users"></i>Client
+
+            </a>
         </li>
         <li>
-            <a href="{{route('produit.index')}}">Produit</a>
+            <a href="{{route('produit.index')}}">
+            <i class="mr-3 fab fa-product-hunt"></i>Product</a>
         </li>
         <li>
-            <a href="{{route('facture.index')}}">Facture</a>
+            <a href="{{route('facture.index')}}">
+            <i class="mr-3 fas fa-file-invoice"></i>Facture</a>
         </li>
         <!-- FacturProduit -->
         <li>
             <a href="{{route('FacturProduit.index')}}">Ligne facture</a>
         </li>
+        @if(session()->get('name')=='Admin')
         <li>
-            <a href="#">Users</a>
+            <a href="{{route('user.index')}}">
+            <i class="mr-3 fas fa-users-cog"></i>Users</a>
         </li>
-        <!-- <li>
-            <a href="#">About</a>
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-            <ul class="collapse list-unstyled" id="pageSubmenu">
-                <li>
-                    <a href="#">Page 1</a>
-                </li>
-                <li>
-                    <a href="#">Page 2</a>
-                </li>
-                <li>
-                    <a href="#">Page 3</a>
-                </li>
-            </ul>
-        </li> -->
+        @endif
         <li>
             <a href="#">Contact</a>
         </li>

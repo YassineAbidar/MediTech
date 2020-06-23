@@ -46,7 +46,11 @@
                         <td>{{$product->ref_produit}}</td>
                         <td>{{$product->libelle}}</td>
                         <td>{{$product->prix_unitaire." "."DH"}}</td>
+                        @if($product->quantity_stock<=5)
+                        <td class="bg-danger text-white font-weight-bold">{{$product->quantity_stock}}</td>
+                        @else
                         <td>{{$product->quantity_stock}}</td>
+                        @endif
                         <td>{{$product->created_at}}</td>
                         <td>
                             <a class="btn btn-info btn-sm" href="#">edit</a>

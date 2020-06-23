@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark default-color">
     <div class="container-fluid">
 
         <button type="button" id="sidebarCollapse" class="navbar-btn">
@@ -11,18 +11,19 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Page</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Page</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link " id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @if(session()->has('name'))
+                        {{session()->get('name')}}
+                        <i class="fas fa-user"></i>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink-333">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="{{route('user.logOut')}}">LogOut</a>
+                    </div>
                 </li>
             </ul>
         </div>

@@ -28,27 +28,23 @@
 </head>
 
 <body>
-    <div class="container mt-4 justify-content-center col-md-6 offset-md-3 align-items-center">
-        @if(session()->has('success'))
-        <div class="alert alert-success">
-            {{session()->get('success')}}
-        </div>
-        @endif
-        @if(session()->has('error'))
-        <div class="alert alert-danger">
-            {{session()->get('error')}}
-        </div>
-        @endif
-    </div>
+
     <div class="container">
         <div class="row mt-5">
             <div style="width: 300px;" class="card mt-5 justify-content-center col-md-4 offset-md-4 align-items-center">
 
                 <div class="card-body">
                     <!-- Default form subscription -->
-                    <form action="/loginUser" method="get">
+                    <div class="row">
+                        @if(session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{session()->get('error')}}
+                        </div>
+                        @endif
+                    </div>
+                    <form action="/loginUser" method="post">
                         @csrf
-                        <p class="h4 mb-4">Se Connecter</p>
+                        <p class="h4 mb-4 text-center">Se Connecter</p>
                         <div class="form-group">
                             <label for="name">User Name</label>
                             <input type="text" id="name" name="name" class="form-control mb-4" value="{{old('name')}}" required placeholder="User Name">
