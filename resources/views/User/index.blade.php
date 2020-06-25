@@ -48,6 +48,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">User</li>';
+        var item2 = '<li class="breadcrumb-item active">Index</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
 
         // $(document).on('submit', '#form_add_user', function(e) {
         //     e.preventDefault();

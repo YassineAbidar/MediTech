@@ -47,6 +47,8 @@ class ProduitController extends Controller
             'quantity_stock' => $request->quantity_stock,
             'libelle' => $request->libelle,
         ]);
+        $request->session()->flash('success', "product  created Successfully");
+        toast(session('success'), 'success');
         return redirect(route('produit.index'));
     }
 
@@ -99,7 +101,8 @@ class ProduitController extends Controller
         $produit->quantity_stock = $request->quantity_stock;
         $produit->libelle = $request->libelle;
         $produit->save();
-        $request->session()->flash('success', "product  updated successfly");
+        $request->session()->flash('success', "product  updated Successfully");
+        toast(session('success'), 'success');
         return redirect(route('produit.index'));
     }
 
@@ -117,7 +120,7 @@ class ProduitController extends Controller
     {
         $produit = Produit::find($id);
         $produit->delete();
-        session()->flash('success', "product  deleted successfly");
+        session()->flash('success', "product  deleted Successfully");
         toast(session('success'), 'success');
         return redirect(route('produit.index'));
     }

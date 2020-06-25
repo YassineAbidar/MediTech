@@ -11,7 +11,7 @@
         <li> <a href="#faible">Faible </a></li>
     </ul>
     <div id="fort">
-        <table class="table">
+        <table class="table table-bordered table-primary">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -33,7 +33,7 @@
         </table>
     </div>
     <div id="moyenne">
-        <table class="table">
+        <table class="table table-bordered table-primary">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -55,7 +55,7 @@
         </table>
     </div>
     <div id="faible">
-        <table class="table">
+        <table class="table table-bordered table-primary">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -89,6 +89,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">Product</li>';
+        var item2 = '<li class="breadcrumb-item active">Order</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $("#tabs").tabs();
     });
     $(".table").dataTable();

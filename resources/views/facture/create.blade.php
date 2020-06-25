@@ -118,7 +118,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
-
+        let item1 = '<li class="breadcrumb-item active">Facture</li>';
+        var item2 = '<li class="breadcrumb-item active">Create</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $(document).on('click', '#btn_add_product', function(e) {
             e.preventDefault();
             let list_product = $("#produits").val();

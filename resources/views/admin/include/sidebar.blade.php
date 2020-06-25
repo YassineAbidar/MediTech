@@ -21,7 +21,7 @@
             </ul>
         </li> -->
         <li>
-            <a href="#">
+            <a href="{{route('dashboard.index')}}">
             <i class=" mr-3 fas fa-home"></i>Dashbord </a>
         </li>
         <li>
@@ -39,17 +39,12 @@
             <i class="mr-3 fas fa-file-invoice"></i>Facture</a>
         </li>
         <!-- FacturProduit -->
-        <li>
-            <a href="{{route('FacturProduit.index')}}">Ligne facture</a>
-        </li>
-        @if(session()->get('name')=='Admin')
+        @if(Auth::user()->name=='Admin')
         <li>
             <a href="{{route('user.index')}}">
             <i class="mr-3 fas fa-users-cog"></i>Users</a>
         </li>
         @endif
-        <li>
-            <a href="#">Contact</a>
-        </li>
+
     </ul>
 </nav>

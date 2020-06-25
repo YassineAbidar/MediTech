@@ -66,6 +66,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">Client</li>';
+        var item2 = '<li class="breadcrumb-item active">Index</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $('#table_client').DataTable({
             "order": [
                 [3, "desc"]
@@ -86,7 +90,7 @@
             const url = $(this).attr('href');
             console.log(url);
             Swal.fire({
-                title: 'Are you shure to delete client ?',
+                title: 'Are you shure to delete client and all facture the client?',
                 text: "La suppression est reversible",
                 icon: 'warning',
                 showCancelButton: true,

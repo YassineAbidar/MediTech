@@ -27,9 +27,11 @@ class FactureController extends Controller
         // }
         // dd($factureCli);
         foreach ($factures as $factuCli) {
+           if($factuCli->client!==null){
             $factuCli->setAttribute('client', $factuCli->client);
+           }
         }
-        // dd($factures);
+        //  dd($factures);
         return view('facture.index')->with('factures', $factures);
     }
 
@@ -183,21 +185,9 @@ class FactureController extends Controller
     }
     public function deletefacture($id)
     {
-        $facture = Facture::find($id);
-        if ($facture != null) {
-            // dd($facture);
-            $facture_produit = DB::table('facture_produits')->where('FACTURE_ID', $facture->id)->get();
-            // dd($facture_produit);
-            foreach ($facture_produit as $factProduit) {
-                $facture_produit = FactureProduit::find($factProduit->id);
-                $produit = Produit::find($factProduit->produit_id);
-                $produit->update([
-                    'quantity_stock' => $produit->quantity_stock + $factProduit->qty,
-                ]);
-                $facture_produit->delete();
-            }
-            $facture->delete();
-            session()->flash('success', "facture  deleted successfly");
+        $status = $this->deletFactureService($id);
+        if ($status) {
+            session()->flash('success', "facture  deleted Successfully");
             toast(session('success'), 'success');
         } else {
             session()->flash('error', "facture doesn't existe");
@@ -219,6 +209,29 @@ class FactureController extends Controller
                 'status' => true,
                 'message' => ''
             ]);
+        }
+    }
+    public function deletFactureService($id)
+    {
+        $facture = Facture::find($id);
+        if ($facture != null) {
+            // dd($facture);
+            $facture_produit = DB::table('facture_produits')->where('FACTURE_ID', $facture->id)->get();
+            // dd($facture_produit);
+            foreach ($facture_produit as $factProduit) {
+                $facture_produit = FactureProduit::find($factProduit->id);
+                $produit = Produit::find($factProduit->produit_id);
+                $produit->update([
+                    'quantity_stock' => $produit->quantity_stock + $factProduit->qty,
+                ]);
+                $facture_produit->delete();
+            }
+            $facture->delete();
+
+            return true;
+        } else {
+
+            return false;
         }
     }
 }

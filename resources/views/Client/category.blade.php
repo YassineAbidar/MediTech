@@ -13,7 +13,7 @@
             <li> <a href="#client_potentielle">client à potentiel </a></li>
         </ul>
         <div id="vip">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-primary">
                 <thead>
                     <tr>
                         <th>Nom Client </th>
@@ -35,7 +35,7 @@
             </table>
         </div>
         <div id="client_Ordinaire">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-primary">
                 <thead>
                     <tr>
                         <th>Nom Client </th>
@@ -57,7 +57,7 @@
             </table>
         </div>
         <div id="client_potentielle">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-primary">
                 <thead>
                     <tr>
                         <th>Nom Client </th>
@@ -85,6 +85,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">Client</li>';
+        var item2 = '<li class="breadcrumb-item active">Category</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $("#tabs").tabs();
         $(".table").DataTable();
     });

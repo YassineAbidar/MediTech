@@ -68,6 +68,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">Facture</li>';
+        var item2 = '<li class="breadcrumb-item active">Index</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $('#table_facture').DataTable({
             "order": [
                 [3, "desc"]

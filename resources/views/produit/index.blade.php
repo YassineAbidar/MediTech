@@ -5,13 +5,6 @@
 @endsection
 @section('content')
 <div class="col-md-12">
-    @if(session()->has('success'))
-    <center>
-        <div class="alert alert-success col-md-12 justify-content-center">
-            {{session()->get('success')}}
-        </div>
-    </center>
-    @endif
     @if(!count($produits)>0)
     <div class="alert alert-warning" role="alert">No item found</div>
     @else
@@ -53,7 +46,6 @@
                         @endif
                         <td>{{$product->created_at}}</td>
                         <td>
-                            <a class="btn btn-info btn-sm" href="#">edit</a>
                             <a class="btn_delete btn btn-danger btn-sm" href="{{route('produit.delete',$product->id)}}">delete</a>
                             <a class="btn btn-warning btn-sm" data-toggle="modal" data-target="#EditProduct" data-id="{{$product->id}}" data-ref="{{$product->ref_produit}}" data-libelle="{{$product->libelle}}" data-prix="{{$product->prix_unitaire}}" data-qty="{{$product->quantity_stock}}">edit</a>
                         </td>
@@ -72,6 +64,10 @@
 @section('script')
 <script>
     $(document).ready(function() {
+        let item1 = '<li class="breadcrumb-item active">Product</li>';
+        var item2 = '<li class="breadcrumb-item active">Index</li>';
+        $("#list_breadcrumb").append(item1);
+        $("#list_breadcrumb").append(item2);
         $("#table_produit").DataTable();
         $('.btn_delete').on('click', function(event) {
             event.preventDefault();

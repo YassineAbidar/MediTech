@@ -7,6 +7,7 @@ use App\Http\Requests\ClientRequest;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\FactureController;
 
 class ClientController extends Controller
 {
@@ -118,14 +119,23 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->delete();
-        return redirect(route('client.index'));
+        dd($client);
     }
     public function deleteClient($id)
     {
         $client = Client::find($id);
-        // dd($client);
-        $client->delete();
+        if ($client != null) {
+            $factures = $client->factures;
+            if (count($factures) > 0) {
+                foreach ($factures as $facture) {
+                    $facturSer = new FactureController();
+                    $facturSer->deletFactureService($facture->id);
+                }
+            }
+            $client->delete();
+            session()->flash('success', "Client  deleted Successfully");
+            toast(session('success'), 'success');
+        }
         return redirect(route('client.index'));
     }
     public function getInfoClient(Request $request)
@@ -156,7 +166,7 @@ class ClientController extends Controller
             $nbrFacture = DB::table('factures')->where('client_id', $client->id)->count();
             $client->setAttribute('nbrFacture', $nbrFacture);
             $viewChiffreAffaire = DB::select("select id_client,chiffre_affaire,categorie from V_CHIFFRE_AFFAIRE where id_client=$client->id");
-               if ($viewChiffreAffaire != null) {
+            if ($viewChiffreAffaire != null) {
                 $cat = $viewChiffreAffaire[0]->categorie;
                 if ($cat == 'VIP') {
                     $clientVip[] = [$viewChiffreAffaire, $client];

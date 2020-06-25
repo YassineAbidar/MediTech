@@ -42,16 +42,26 @@
                         </div>
                         @endif
                     </div>
-                    <form action="/loginUser" method="post">
+                    <form action="{{route('login')}}" method="post">
                         @csrf
                         <p class="h4 mb-4 text-center">Se Connecter</p>
                         <div class="form-group">
                             <label for="name">User Name</label>
-                            <input type="text" id="name" name="name" class="form-control mb-4" value="{{old('name')}}" required placeholder="User Name">
+                            <input type="text" id="name" name="name" class="form-control mb-4 @error('name') is-invalid @enderror" value="{{old('name')}}" required placeholder="User Name">
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control mb-4" required placeholder="Password">
+                            <input type="password" name="password" id="password" class="form-control mb-4 @error('name') is-invalid @enderror" required placeholder="Password">
+                            @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <!-- Sign in button -->
