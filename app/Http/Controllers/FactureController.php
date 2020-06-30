@@ -27,9 +27,9 @@ class FactureController extends Controller
         // }
         // dd($factureCli);
         foreach ($factures as $factuCli) {
-           if($factuCli->client!==null){
-            $factuCli->setAttribute('client', $factuCli->client);
-           }
+            if ($factuCli->client !== null) {
+                $factuCli->setAttribute('client', $factuCli->client);
+            }
         }
         //  dd($factures);
         return view('facture.index')->with('factures', $factures);
@@ -58,42 +58,56 @@ class FactureController extends Controller
     {
         $produits = $request->produits;
         $qty_demande = $request->qty_demnde;
+        $size = count($produits);
+        $erros = [];
+        for ($i = 0; $i < $size; $i++) {
+            $produit = Produit::find($produits[$i]);
+
+            if ($produit->quantity_stock <   $qty_demande[$i]) {
+                $erros[] = [$produit->libelle];
+            }
+        }
         $client = Client::find($request->client);
         $date =  date('d/m/yy');
-        $size = count($produits);
-        $facture = Facture::create([
-            'code_facture' => $request->code_facture,
-            'date_creation' => $date,
-            'client_id' => $client->id,
-        ]);
-        $facture_id = DB::table('factures')->max('id');
-        $tabProduitQty = [];
-        $output = "";
-        $total = 0;
-        for ($i = 0; $i < $size; $i++) {
-            $tabProduitQty[] = $qty_demande[$i];
-            $produit = Produit::find($produits[$i]);
-            $total += $produit->prix_unitaire * $qty_demande[$i];
-            $factProduit = FactureProduit::create([
-                'facture_id' => $facture_id,
-                'produit_id' => $produits[$i],
-                'qty' => $qty_demande[$i],
+        if (count($erros) > 0) {
+            return response()->json([
+                'status' => false,
+                'error' => $erros,
+                'msg' => 'quantity Insufissante',
             ]);
-            $output .= '<tr>
-                <td>' . $produit->ref_produit . '</td>
-                <td>' . $produit->libelle . '</td>
-                <td>' . $produit->prix_unitaire . '</td>
-                <td>' . $qty_demande[$i] . '</td>
-                <td>' . $qty_demande[$i] * $produit->prix_unitaire . '</td>
-                </tr>';
+        } else {
+            $facture = Facture::create([
+                'code_facture' => $request->code_facture,
+                'date_creation' => $date,
+                'client_id' => $client->id,
+            ]);
+            $facture_id = DB::table('factures')->max('id');
+            $output = "";
+            $total = 0;
+            for ($i = 0; $i < $size; $i++) {
+                $produit = Produit::find($produits[$i]);
+                $total += $produit->prix_unitaire * $qty_demande[$i];
+                $factProduit = FactureProduit::create([
+                    'facture_id' => $facture_id,
+                    'produit_id' => $produits[$i],
+                    'qty' => $qty_demande[$i],
+                ]);
+                $output .= '<tr>
+                    <td>' . $produit->ref_produit . '</td>
+                    <td>' . $produit->libelle . '</td>
+                    <td>' . $produit->prix_unitaire . '</td>
+                    <td>' . $qty_demande[$i] . '</td>
+                    <td>' . $qty_demande[$i] * $produit->prix_unitaire . '</td>
+                    </tr>';
+            }
+            return response()->json([
+                'status' => true,
+                'facture_id' => $facture_id,
+                'resumer' => $output,
+                'message' => 'Facture aded successfly',
+                'total' => $total,
+            ]);
         }
-        return response()->json([
-            'status' => true,
-            'facture_id' => $facture_id,
-            'resumer' => $output,
-            'message' => 'Facture aded successfly',
-            'total' => $total,
-        ]);
     }
     public function getPdfFacture($id)
     {
@@ -139,50 +153,7 @@ class FactureController extends Controller
             'total' => $total,
         ]);
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Facture  $facture
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Facture $facture)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Facture  $facture
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Facture $facture)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Facture  $facture
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Facture $facture)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Facture  $facture
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Facture $facture)
-    {
-        dd($facture);
-    }
     public function deletefacture($id)
     {
         $status = $this->deletFactureService($id);
@@ -230,7 +201,6 @@ class FactureController extends Controller
 
             return true;
         } else {
-
             return false;
         }
     }

@@ -116,7 +116,8 @@ class UserController extends Controller
                 'status' => false,
                 'nbrProduit'=>$nbrProduit,
                 'nbrClient'=>$nbrClient,
-                'msg' => 'no facture yet'
+                'nbrFacture'=>$nbrFacture,
+                'msg' => 'no facture yet',
             ]);
         }
     }

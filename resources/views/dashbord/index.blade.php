@@ -190,7 +190,7 @@
                     $("#alerMessage").show();
                     $("#nbrClient").text(data.nbrClient + " Clients");
                     $("#nbrProduit").text(data.nbrProduit + " Products");
-                    $("#nbrFacture").text(0+ " Factures")
+                    $("#nbrFacture").text(data.nbrFacture+ " Factures")
                     $("#alerMessage").text('No facture yet');
                 }
             },

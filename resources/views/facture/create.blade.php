@@ -79,7 +79,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div style="display: none;" id="alert_facture" class="alert alert-success" role="alert"></div>
+                        <div style="display: none;" id="alert_facture" class="alert" role="alert">
+                        <ul id="alert_error" class="list-group-item">
+                        </ul>
+                    </div>
                     </div>
                     <div class="col-md-6">
                         <button id="btn_save" style="display: none;" type="submit" class="btn btn-outline-primary float-right" type="button">Valider</button>
@@ -141,6 +144,7 @@
                         $("#btn_save").show();
                         $("#alert_message").hide();
                     } else {
+
                         $("#alert_message").show();
                         $("#alert_message").text(data.message);
                         $("#btn_save").hide();
@@ -188,7 +192,7 @@
             if ($("#client").val() == 0) {
                 Swal.queue([{
                     title: 'Client no selected',
-                    text: 'Selct client first',
+                    text: 'Select client first',
                 }])
             } else {
                 $.ajax({
@@ -197,14 +201,26 @@
                     data: $("#form_facture").serialize(),
                     success: function(data) {
                         console.log(data);
-                        $("#alert_facture").show();
-                        $("#alert_facture").text(data.message);
-                        $("#table_clcul").show();
-                        $("#tbody_facture").html(data.resumer);
-                        $("#btn_total").show();
-                        $("#btn_total").val("Total: " + data.total + " DH");
-                        $("#apercu").show();
-                        $("#facture_id").val(data.facture_id);
+                        if (data.status) {
+                            $("#alert_facture").show();
+                            $("#alert_facture").removeClass('alert-danger');
+                            $("#alert_facture").addClass('alert-success');
+                            $("#alert_facture").text(data.message);
+                            $("#table_clcul").show();
+                            $("#tbody_facture").html(data.resumer);
+                            $("#btn_total").show();
+                            $("#btn_total").val("Total: " + data.total + " DH");
+                            $("#apercu").show();
+                            $("#facture_id").val(data.facture_id);
+                        } else {
+
+                            $("#alert_facture").show();
+                            $("#alert_facture").addClass('alert-danger');
+                            for(let k=0;k<data.error.length;k++){
+                                $("#alert_error").append("<li>"+data.error[k]+" "+data.msg+"</li>")
+                            }
+                        }
+
                     },
                     error: function(one, two, three) {
                         console.log(one, two, three);
